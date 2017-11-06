@@ -1,6 +1,8 @@
 # Specjalizowany czujnik temperaturowy:
 ## Mikroprocesorowy analizator cieplny
 
+Wersja testowa. Będą zmiany w kodzie i hardware w miarę dostępności części.  
+
 Zrobiłeś kawę albo herbatę i nie chcesz pilnować aż ostygnie? To coś dla Ciebie!
   
 Do zrobienia:  

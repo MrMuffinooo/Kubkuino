@@ -9,8 +9,7 @@
 #define bled A3
 
 /* Pomiary */
-int hot = 60; //60
-int cold = 47; //47
+int hot, cold;
 double pomiar = 0;
 
 /* Bluetooth */

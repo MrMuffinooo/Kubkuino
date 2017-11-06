@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source C:\Users\fotel\Documents\Arduino\Kubkuino\KubkuinoDNO_GY-906\Board_KiCAD_GY-906\Board.sch)
-    (date "02.11.2017 15:23:04")
+    (date "06.11.2017 18:59:43")
     (tool "Eeschema (2017-10-30 revision 6300041ce)-makepkg")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -29,7 +29,7 @@
       (tstamp 597484B0))
     (comp (ref U2)
       (value LM7805_TO220)
-      (footprint TO_SOT_Packages_SMD:TO-263-2)
+      (footprint TO_SOT_Packages_SMD:TO-252-2)
       (libsource (lib regul) (part LM7805_TO220))
       (sheetpath (names /) (tstamps /))
       (tstamp 597487DF))

@@ -10,8 +10,13 @@
 #define _NAME (String)"Kubkuino_IR" //Mozna zmienic na jakakolwiek nazwe, ale ta pasuje :P
 #define _PASS (String)"0000" //Nie chcemy zeby ktos nam sie bawil. Haslo do parowania.
 #define ALARM_TIME 10000 //Ile trwa piszczenie alarmu.
+#define DEBUG
+#define VERSION "SW1.00 HW1.00 Pre"
 
+#if F_CPU != 16000000
+#undef F_CPU
 #define F_CPU 16000000
+#endif
 
 Adafruit_SSD1306 display;
 
@@ -30,10 +35,18 @@ void setup() {
   pinMode(bled, OUTPUT);
   pinMode(ctl, INPUT);
   digitalWrite(btkey, LOW);
+#if defined DEBUG
+  digitalWrite(btpow, HIGH);
+  hot = 30;
+  cold = 25;
+#else
   digitalWrite(btpow, LOW);
-
+  hot = 60;
+  cold = 47;
+#endif
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false);
   bt.begin(38400);
+  splash(F(VERSION));
 }
 
 void loop() {
@@ -42,7 +55,7 @@ void loop() {
   alarm(pomiar, hot, cold);
 
   uint32_t czas = millis();
-  while (millis() - czas <= 100) {
+  while (millis() - czas <= 50) {
     ctrl.Update();
     if (ctrl.clicks == 1)
       powermenu();
@@ -134,7 +147,7 @@ void btctl(String tinput) { //Usuwamy \r\n
       else if (tinput[0] == '?')
         bt.print((String)cold + "\r\n");
       break;
-    case 'S': if (tinput.length() >= 2 ) service(tinput);//Komendy AT do bluetootha
+    case 'S': if (tinput.length() >= 2 ) service(tinput);
       break;
     case 'D': switch (tinput[0]) {
         case '0': if (tinput[1] == '0') { //LCD
@@ -199,10 +212,12 @@ void btctl(String tinput) { //Usuwamy \r\n
 
 //Tutaj wchodzi komenda bez "\r\n"!
 void service(String a) {
+#ifdef DEBUG
   display.clearDisplay();
   display.setCursor(0, 0);
   display.setTextSize(1);
   display.println(a);
+#endif
   if (a == "AT+DISC") conn = false;
   a += "\r\n";
   digitalWrite(btkey, HIGH);
@@ -220,12 +235,14 @@ void service(String a) {
   for (uint8_t g = 0; g < a.length(); g++)
     if (a[g] == 0x0A || a[g] == 0x0D) a.remove(g);
   a.trim();
-  display.print(a);//Mozna wywalic ale pokazuje ze dziala
   if (conn) bt.print(a + "\r\n");
 
+#ifdef DEBUG
+  display.print(a);//Mozna wywalic ale pokazuje ze dziala
   display.display();
   delay(1000);
   display.clearDisplay();
+#endif
   return void();
 }
 
@@ -370,6 +387,24 @@ void poweroff() {
 
 void poweron() {
   detachInterrupt(0);
+  return void();
+}
+
+void splash(String _ver) {
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.setTextColor(WHITE, BLACK);
+  display.setTextSize(2);
+  display.println("Kubkuino");
+  display.setTextSize(1);
+  display.println(_ver);
+#if defined DEBUG
+  display.print(__TIME__);
+  display.print(" ");
+  display.print(__DATE__);
+#endif
+  display.display();
+  delay(2500);
   return void();
 }
 

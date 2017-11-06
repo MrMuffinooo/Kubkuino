@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2
+EESchema Schematic File Version 3
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -45,6 +45,7 @@ LIBS:elec-unifil
 LIBS:ESD_Protection
 LIBS:ftdi
 LIBS:gennum
+LIBS:graphic
 LIBS:graphic_symbols
 LIBS:hc11
 LIBS:infineon
@@ -136,7 +137,7 @@ U 1 1 597487DF
 P 4450 5250
 F 0 "U2" H 4300 5375 50  0000 C CNN
 F 1 "LM7805_TO220" H 4450 5375 50  0000 L CNN
-F 2 "TO_SOT_Packages_SMD:TO-263-2" H 4450 5475 50  0001 C CIN
+F 2 "TO_SOT_Packages_SMD:TO-252-2" H 4450 5475 50  0001 C CIN
 F 3 "" H 4450 5200 50  0001 C CNN
 	1    4450 5250
 	1    0    0    -1  
@@ -227,7 +228,7 @@ F 1 "AC/DC In (12V)" V 2550 5350 50  0000 C CNN
 F 2 "Socket_Strips:Socket_Strip_Angled_1x02_Pitch2.54mm" H 2450 5350 50  0001 C CNN
 F 3 "" H 2450 5350 50  0001 C CNN
 	1    2450 5350
-	-1   0    0    1   
+	-1   0    0    -1  
 $EndComp
 Text GLabel 5450 5250 2    60   Input ~ 0
 5V
