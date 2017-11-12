@@ -11,12 +11,7 @@
 #define _PASS (String)"0000" //Nie chcemy zeby ktos nam sie bawil. Haslo do parowania.
 #define ALARM_TIME 10000 //Ile trwa piszczenie alarmu.
 #define DEBUG
-#define VERSION "SW1.00 HW1.00 Pre"
-
-#if F_CPU != 16000000
-#undef F_CPU
-#define F_CPU 16000000
-#endif
+#define VERSION "PreRelease"
 
 Adafruit_SSD1306 display;
 
@@ -46,24 +41,30 @@ void setup() {
 #endif
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false);
   bt.begin(38400);
-  splash(F(VERSION));
+  bt.flush();
+  splash();
 }
 
 void loop() {
-  pomiar = readTemp();
-  drawmain(hot, cold, pomiar);
-  alarm(pomiar, hot, cold);
+  ctrl.Update();
 
-  uint32_t czas = millis();
-  while (millis() - czas <= 50) {
-    ctrl.Update();
-    if (ctrl.clicks == 1)
-      powermenu();
-    if (bt.available()) {
-      String input = bt.readStringUntil(';');
-      bt.flush();
-      btctl(input);
-    }
+  pomiar = readTemp();
+  if (pomiar != poppomiar) {
+    handlemain(hot, cold, pomiar);
+    poppomiar = pomiar;
+  }
+
+  if (ctrl.clicks == 1)
+    powermenu();
+  if (bt.available()) {
+    digitalWrite(rled, HIGH);
+    digitalWrite(gled, HIGH);
+    digitalWrite(bled, HIGH);
+    String input = bt.readStringUntil(';');
+    btctl(input);
+    digitalWrite(rled, LOW);
+    digitalWrite(gled, LOW);
+    digitalWrite(bled, LOW);
   }
 }
 
@@ -78,7 +79,7 @@ double readTemp() {
   return ((ret * .02) - 273.15);
 }
 
-void drawmain(int _hot, int _cold, double _pomiar) {
+void handlemain(int _hot, int _cold, double _pomiar) {
   display.clearDisplay();
   display.setCursor(0, 0);
   display.setTextColor(WHITE, BLACK);
@@ -97,26 +98,53 @@ void drawmain(int _hot, int _cold, double _pomiar) {
   display.write(247);
   display.print('C');
 
-  display.fillRoundRect(96, 16, 32, 16, 2, WHITE);
-  display.fillCircle(93, 24, 6, WHITE);
-  display.fillCircle(93, 24, 4, BLACK);
+  display.fillCircle(95, 46, 8, WHITE);
+  display.fillCircle(95, 46, 5, BLACK);
+  display.fillRoundRect(96, 32, 32, 32, 3, WHITE);
 
-  if (_pomiar > _hot)
-    display.drawBitmap(100, 0, state_hot, 24, 16, WHITE);
-  else if (_pomiar > _cold)
-    display.drawBitmap(100, 0, state_ready, 24, 16, WHITE);
-  else
-    display.drawBitmap(100, 0, state_cold, 24, 16, WHITE);
-
+  if (_pomiar > _hot) {
+    if (ledon) {
+      digitalWrite(rled, HIGH);
+      digitalWrite(gled, LOW);
+      digitalWrite(bled, LOW);
+    }
+    alarmState = 0b100;
+    display.drawBitmap(100, 15, state_hot, 24, 16, WHITE);
+  }
+  else if (_pomiar > _cold) {
+    if (ledon) {
+      digitalWrite(rled, LOW);
+      digitalWrite(gled, HIGH);
+      digitalWrite(bled, LOW);
+    }
+    bitClear(alarmState, 2);
+    bitSet(alarmState, 0);
+    display.drawBitmap(100, 15, state_ready, 24, 16, WHITE);
+  }
+  else {
+    if (ledon) {
+      digitalWrite(rled, LOW);
+      digitalWrite(gled, LOW);
+      digitalWrite(bled, HIGH);
+    }
+    alarmState = 0b110;
+    display.drawBitmap(100, 15, state_cold, 24, 16, WHITE);
+  }
   if (conn)
-    display.drawBitmap(104, 16, icon, 16, 16, 0);
+    display.drawBitmap(104, 40, icon, 16, 16, 0);
+
+  if ((alarmState >> 0) && !(alarmState >> 2) && !(alarmState >> 1)) {
+    if (glosny) bipczyk();
+    alarmState = 0b110;
+  }
+
   display.display();
   return void();
 }
 
 void btctl(String tinput) { //Usuwamy \r\n
-  if (tinput == "\r\n" || tinput == "\n" || tinput == "\r") return void();
   tinput.trim();
+  if (tinput.length() == 0) return void();
   char command = tinput.charAt(0);
   String tempout;
   if (tinput.length() > 1)
@@ -154,9 +182,6 @@ void btctl(String tinput) { //Usuwamy \r\n
             display.ssd1306_command(0xAE); lcdon = false;
           } else if (tinput[1] == '1') {
             display.ssd1306_command(0xAF); lcdon = true;
-          } else if (tinput[1] == '?') {
-            (lcdon) ? bt.print(F("1\r\n")) :
-            bt.print(F("1\r\n"));
           } break;
         case '1': if (tinput[1] == '0') {
             dimlcd = false;
@@ -164,9 +189,6 @@ void btctl(String tinput) { //Usuwamy \r\n
           } else if (tinput[1] == '1') {
             dimlcd = true;
             display.dim(true);
-          } else if (tinput[1] == '?') {
-            dimlcd ? bt.print(F("1\r\n")) :
-            bt.print(F("0\r\n"));
           } break;
         case '2': if (tinput[1] == '0') { //BT
             service(F("AT+DISC")); digitalWrite(btpow, LOW); conn = false;
@@ -178,10 +200,7 @@ void btctl(String tinput) { //Usuwamy \r\n
             digitalWrite(gled, LOW);
             digitalWrite(bled, LOW);
           } else if (tinput[1] == '1') ledon = true;
-          else if (tinput[1] == '?') {
-            (ledon) ? bt.print(F("1\r\n")) :
-            bt.print(F("0\r\n"));
-          } break;
+          break;
         case '4': if (tinput[1] == '0') { //Piezo
             tone(buzz, 432); delay(500); noTone(buzz);
             glosny = false;//Wszystko poza tym mozna wywalic
@@ -189,9 +208,6 @@ void btctl(String tinput) { //Usuwamy \r\n
             tone(buzz, 432); delay(75); noTone(buzz); delay(250);
             tone(buzz, 432); delay(75); noTone(buzz);
             glosny = true;//J.w.
-          } else if (tinput == "?") {
-            (glosny) ? bt.print(F("1\r\n")) :
-            bt.print(F("0\r\n"));
           } break;
         case '5': bt.print(F("1\r\n")); break;
         case '6':
@@ -217,6 +233,7 @@ void service(String a) {
   display.setCursor(0, 0);
   display.setTextSize(1);
   display.println(a);
+  display.display();
 #endif
   if (a == "AT+DISC") conn = false;
   a += "\r\n";
@@ -228,12 +245,8 @@ void service(String a) {
   while (bt.available() == 0 && (millis() - temptime) <= 5000) {}
   if (bt.available() != 0)
     a = bt.readStringUntil('\0');
-  else a = "REQUEST TIMEOUT\r\n";
+  else a = F("TIMEOUT\r\n");
   digitalWrite(btkey, LOW); delay(500);
-  bt.flush();
-  a.trim();
-  for (uint8_t g = 0; g < a.length(); g++)
-    if (a[g] == 0x0A || a[g] == 0x0D) a.remove(g);
   a.trim();
   if (conn) bt.print(a + "\r\n");
 
@@ -243,6 +256,7 @@ void service(String a) {
   delay(1000);
   display.clearDisplay();
 #endif
+  bt.flush();
   return void();
 }
 
@@ -250,7 +264,12 @@ void bipczyk() {
   uint32_t tempbuzz = millis();
   tone(buzz, 432);
   while ((millis() - tempbuzz) <= ALARM_TIME && digitalRead(ctl)) {
-    drawmain(hot, cold, readTemp());
+    pomiar = readTemp();
+    if (pomiar != poppomiar) {
+      handlemain(hot, cold, pomiar);
+      poppomiar = pomiar;
+    }
+    handlemain(hot, cold, pomiar);
     if (bt.available()) {
       String input = bt.readStringUntil(';');
       bt.flush();
@@ -259,73 +278,47 @@ void bipczyk() {
   }
   noTone(buzz);
   while (digitalRead(ctl) == LOW)
-    drawmain(hot, cold, readTemp());
+    handlemain(hot, cold, readTemp());
   ctrl.reset();
-  return void();
-}
-
-void alarm(double _pomiar, int _hot, int _cold) {
-  if (_pomiar > _hot)
-    alarmState = 0b100;
-  else if (_pomiar < _cold)
-    alarmState = 0b110;
-  else {
-    bitClear(alarmState, 2);
-    bitSet(alarmState, 0);
-  }
-
-  if (ledon) {
-    switch (alarmState) {
-      default:
-        digitalWrite(rled, LOW);
-        digitalWrite(gled, HIGH);
-        digitalWrite(bled, LOW); break;
-      case 0b100:
-        digitalWrite(rled, HIGH);
-        digitalWrite(gled, LOW);
-        digitalWrite(bled, LOW); break;
-      case 0b110:
-        digitalWrite(rled, LOW);
-        digitalWrite(gled, LOW);
-        digitalWrite(bled, HIGH); break;
-    }
-  }
-  if ((alarmState >> 0) && !(alarmState >> 2) && !(alarmState >> 1)) {
-    if (glosny) bipczyk();
-    alarmState = 0b110;
-  }
   return void();
 }
 
 void powermenu() {
   int tmp = 0;
-  int _dn = 0;
   bool draw = true;
   ctrl.reset();
+  display.setTextSize(1);
   while (true) {
     while (ctrl.clicks != -1) {
       if (draw) {
         display.clearDisplay();
         display.setCursor(0, 0);
-        display.setTextSize(1);
-        for (int a = _dn; a < _dn + 4; a++) {
+        for (int a = 0; a < 6; a++) {
           (a == tmp) ? display.setTextColor(BLACK, WHITE) :
           display.setTextColor(WHITE, BLACK);
-          display.print(powermodes[a]);
           switch (a) {
             case 0:
+              display.print(F("  Bluetooth: "));
               digitalRead(btpow) ?
               display.println(F("ON      ")) :
               display.println(F("OFF     ")); break;
-            case 1: ledon ?
+            case 1:
+              display.print(F("        LED: "));
+              ledon ?
               display.println(F("ON      ")) :
               display.println(F("OFF     ")); break;
-            case 2: glosny ?
+            case 2:
+              display.print(F("      Alarm: "));
+              glosny ?
               display.println(F("ON      ")) :
               display.println(F("OFF     ")); break;
-            case 3: dimlcd ?
+            case 3:
+              display.print(F(" Dim screen: "));
+              dimlcd ?
               display.println(F("ON      ")) :
               display.println(F("OFF     ")); break;
+            case 4: display.println(F("         Back        ")); break;
+            case 5: display.print(F("       Shutdown      ")); break;
           }
         }
         display.display();
@@ -336,15 +329,12 @@ void powermenu() {
       if (ctrl.clicks == 1) {
         (tmp < 5) ?
         tmp++ : tmp = 0;
-
-        (tmp > 3 && tmp < 6) ?
-        _dn = tmp - 3 : _dn = 0;
         draw = true;
         ctrl.reset();
       }
     }
     switch (tmp) {
-      case 0: (digitalRead(btpow)) ? btctl("D20") : btctl("D21");
+      case 0: (digitalRead(btpow)) ? btctl(F("D20")) : btctl(F("D21"));
         break;
       case 1: ledon ? btctl(F("D30")) : btctl(F("D31")); break;
       case 2: glosny ? btctl(F("D40")) : btctl(F("D41")); break;
@@ -366,11 +356,12 @@ void poweroff() {
   bool _dimlcd = dimlcd;
   bool _ledon = ledon;
   bool _lcdon = lcdon;
-  if (_lcdon) btctl("D00;");
-  if (_dimlcd) btctl("D10;");
-  if (_btpow) btctl("D20;");
-  if (_ledon) btctl("D30;");
-  while (digitalRead(ctl) == LOW);
+  if (_lcdon) btctl(F("D00;"));
+  while (!digitalRead(ctl));
+  if (_dimlcd) btctl(F("D10;"));
+  if (_btpow) btctl(F("D20;"));
+  if (_ledon) btctl(F("D30;"));
+  delay(50);
   attachInterrupt(0, poweron, LOW);
   delay(150);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
@@ -378,10 +369,11 @@ void poweroff() {
   sleep_mode();
 
   sleep_disable();
-  if (_lcdon)btctl("D01;");
-  if (_dimlcd) btctl("D11;");
-  if (_btpow) btctl("D21;");
-  if (_ledon) btctl("D31;");
+
+  if (_lcdon) btctl(F("D01;"));
+  if (_dimlcd) btctl(F("D11;"));
+  if (_btpow) btctl(F("D21;"));
+  if (_ledon) btctl(F("D31;"));
   return void();
 }
 
@@ -390,17 +382,17 @@ void poweron() {
   return void();
 }
 
-void splash(String _ver) {
+void splash() {
   display.clearDisplay();
   display.setCursor(0, 0);
   display.setTextColor(WHITE, BLACK);
   display.setTextSize(2);
-  display.println("Kubkuino");
+  display.println(F("Kubkuino"));
   display.setTextSize(1);
-  display.println(_ver);
+  display.println(F(VERSION));
 #if defined DEBUG
   display.print(__TIME__);
-  display.print(" ");
+  display.print(F(" "));
   display.print(__DATE__);
 #endif
   display.display();

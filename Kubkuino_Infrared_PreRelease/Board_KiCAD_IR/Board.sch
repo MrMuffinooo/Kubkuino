@@ -234,17 +234,6 @@ Text GLabel 5450 5250 2    60   Input ~ 0
 5V
 Text GLabel 2600 1600 0    60   Input ~ 0
 5V
-$Comp
-L GND #PWR04
-U 1 1 5974A6F8
-P 5050 3700
-F 0 "#PWR04" H 5050 3450 50  0001 C CNN
-F 1 "GND" H 5050 3550 50  0000 C CNN
-F 2 "" H 5050 3700 50  0001 C CNN
-F 3 "" H 5050 3700 50  0001 C CNN
-	1    5050 3700
-	1    0    0    -1  
-$EndComp
 Text GLabel 7500 4100 0    60   Input ~ 0
 5V
 $Comp
@@ -444,74 +433,37 @@ Button
 $Comp
 L CONN_01X02 J1
 U 1 1 59750D8D
-P 5250 3550
-F 0 "J1" H 5250 3700 50  0000 C CNN
-F 1 "Piezo" V 5350 3550 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x02_Pitch2.54mm_SMD_Pin1Left" H 5250 3550 50  0001 C CNN
-F 3 "" H 5250 3550 50  0001 C CNN
-	1    5250 3550
-	1    0    0    -1  
-$EndComp
-$Comp
-L GND #PWR03
-U 1 1 59751385
-P 5050 3600
-F 0 "#PWR03" H 5050 3350 50  0001 C CNN
-F 1 "GND" H 5050 3450 50  0000 C CNN
-F 2 "" H 5050 3600 50  0001 C CNN
-F 3 "" H 5050 3600 50  0001 C CNN
-	1    5050 3600
+P 5400 3550
+F 0 "J1" H 5400 3700 50  0000 C CNN
+F 1 "Piezo" V 5500 3550 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02_Pitch2.54mm_SMD_Pin1Left" H 5400 3550 50  0001 C CNN
+F 3 "" H 5400 3550 50  0001 C CNN
+	1    5400 3550
 	1    0    0    -1  
 $EndComp
 $Comp
 L GND #PWR011
 U 1 1 59752C5D
-P 7750 2950
-F 0 "#PWR011" H 7750 2700 50  0001 C CNN
-F 1 "GND" H 7750 2800 50  0000 C CNN
-F 2 "" H 7750 2950 50  0001 C CNN
-F 3 "" H 7750 2950 50  0001 C CNN
-	1    7750 2950
+P 7500 3050
+F 0 "#PWR011" H 7500 2800 50  0001 C CNN
+F 1 "GND" H 7500 2900 50  0000 C CNN
+F 2 "" H 7500 3050 50  0001 C CNN
+F 3 "" H 7500 3050 50  0001 C CNN
+	1    7500 3050
 	1    0    0    -1  
 $EndComp
-$Comp
-L S8050 Q1
-U 1 1 5975351B
-P 7450 3350
-F 0 "Q1" H 7650 3425 50  0000 L CNN
-F 1 "S8050" H 7650 3350 50  0000 L CNN
-F 2 "TO_SOT_Packages_THT:TO-92_Inline_Wide" H 7650 3275 50  0001 L CIN
-F 3 "" H 7450 3350 50  0001 L CNN
-	1    7450 3350
-	1    0    0    -1  
-$EndComp
-Text GLabel 7250 3350 0    60   Input ~ 0
-BT
-Text GLabel 7550 3550 0    60   Input ~ 0
+Text GLabel 7700 2700 3    60   Input ~ 0
+BTen
+Text GLabel 7600 2700 3    60   Input ~ 0
 5V
-Text GLabel 4700 3700 2    60   Input ~ 0
+Text GLabel 4700 3900 2    60   Input ~ 0
 Btx
 Text GLabel 4700 3800 2    60   Input ~ 0
 Brx
-Text GLabel 7450 2950 3    60   Input ~ 0
+Text GLabel 7400 3200 3    60   Input ~ 0
 Btx
-Text GLabel 7350 2950 3    60   Input ~ 0
+Text GLabel 7300 3200 3    60   Input ~ 0
 Brx
-Text GLabel 4700 3900 2    60   Input ~ 0
-Bkey
-$Comp
-L CONN_01X06 J7
-U 1 1 59754103
-P 7500 2750
-F 0 "J7" H 7500 3100 50  0000 C CNN
-F 1 "Bluetooth" V 7600 2750 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x06_Pitch2.54mm_SMD_Pin1Left" H 7500 2750 50  0001 C CNN
-F 3 "" H 7500 2750 50  0001 C CNN
-	1    7500 2750
-	0    -1   -1   0   
-$EndComp
-Text GLabel 7250 2950 3    60   Input ~ 0
-Bkey
 $Comp
 L GND #PWR06
 U 1 1 5975584B
@@ -530,24 +482,20 @@ Reset
 $Comp
 L GND #PWR08
 U 1 1 59757B5E
-P 6300 2000
-F 0 "#PWR08" H 6300 1750 50  0001 C CNN
-F 1 "GND" H 6300 1850 50  0000 C CNN
-F 2 "" H 6300 2000 50  0001 C CNN
-F 3 "" H 6300 2000 50  0001 C CNN
-	1    6300 2000
+P 5800 2200
+F 0 "#PWR08" H 5800 1950 50  0001 C CNN
+F 1 "GND" H 5800 2050 50  0000 C CNN
+F 2 "" H 5800 2200 50  0001 C CNN
+F 3 "" H 5800 2200 50  0001 C CNN
+	1    5800 2200
 	1    0    0    -1  
 $EndComp
-Text GLabel 6300 1800 2    60   Input ~ 0
-5V
-Text GLabel 4700 1600 2    60   Input ~ 0
-1W
 Text GLabel 6450 2850 2    60   Input ~ 0
 SDA
 Text GLabel 6450 2950 2    60   Input ~ 0
 SCL
-Text GLabel 4700 3600 2    60   Input ~ 0
-BT
+Text GLabel 4700 1600 2    60   Input ~ 0
+BTen
 $Comp
 L D D4
 U 1 1 5976AA04
@@ -581,35 +529,9 @@ F 3 "" H 2800 4000 50  0001 C CNN
 	1    2800 4000
 	1    0    0    -1  
 $EndComp
-$Comp
-L Conn_01x03 J2
-U 1 1 59DD551F
-P 5500 2100
-F 0 "J2" H 5580 2142 50  0000 L CNN
-F 1 "Conn_01x03" H 5580 2051 50  0000 L CNN
-F 2 "Socket_Strips:Socket_Strip_Straight_1x03_Pitch2.54mm" H 5500 2100 50  0001 C CNN
-F 3 "" H 5500 2100 50  0001 C CNN
-	1    5500 2100
-	1    0    0    -1  
-$EndComp
-$Comp
-L Conn_01x03 J4
-U 1 1 59DD580E
-P 6100 1900
-F 0 "J4" H 6180 1942 50  0000 L CNN
-F 1 "Conn_01x03" H 6180 1851 50  0000 L CNN
-F 2 "Socket_Strips:Socket_Strip_Straight_1x03_Pitch2.54mm" H 6100 1900 50  0001 C CNN
-F 3 "" H 6100 1900 50  0001 C CNN
-	1    6100 1900
-	-1   0    0    -1  
-$EndComp
 Connection ~ 7850 4100
 Wire Wire Line
 	7500 4100 8250 4100
-Wire Wire Line
-	6650 1900 6300 1900
-Wire Wire Line
-	6650 1700 6650 1900
 Wire Wire Line
 	4700 2100 5300 2100
 Wire Wire Line
@@ -635,8 +557,6 @@ Wire Wire Line
 	3250 5650 2650 5650
 Wire Wire Line
 	2650 5650 2650 5400
-Wire Wire Line
-	5050 3600 5050 3700
 Connection ~ 8050 4100
 Wire Wire Line
 	7550 4550 7850 4550
@@ -653,10 +573,6 @@ Wire Wire Line
 	5300 2650 5500 2650
 Connection ~ 5300 2650
 Wire Wire Line
-	4700 3500 5050 3500
-Wire Wire Line
-	7550 2950 7550 3150
-Wire Wire Line
 	3900 5550 5050 5550
 Connection ~ 4100 5550
 Connection ~ 4450 5550
@@ -672,12 +588,6 @@ Connection ~ 2800 3800
 Connection ~ 2800 3900
 Wire Wire Line
 	6950 1900 7450 1900
-Wire Wire Line
-	5250 1900 4700 1900
-Wire Wire Line
-	5250 1700 5250 1900
-Wire Wire Line
-	5250 1700 6650 1700
 Wire Wire Line
 	3600 5250 3600 5450
 Wire Wire Line
@@ -748,4 +658,153 @@ F 3 "" H 6150 2950 50  0001 C CNN
 	1    6150 2950
 	1    0    0    -1  
 $EndComp
+Text GLabel 4700 3700 2    60   Input ~ 0
+BtConn
+Text GLabel 7200 2700 3    60   Input ~ 0
+BtConn
+Wire Wire Line
+	4700 3500 5200 3500
+$Comp
+L GND #PWR03
+U 1 1 5A033977
+P 5200 3600
+F 0 "#PWR03" H 5200 3350 50  0001 C CNN
+F 1 "GND" H 5200 3450 50  0000 C CNN
+F 2 "" H 5200 3600 50  0001 C CNN
+F 3 "" H 5200 3600 50  0001 C CNN
+	1    5200 3600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Conn_02x03_Odd_Even J2
+U 1 1 5A035BE6
+P 5500 2100
+F 0 "J2" H 5550 2417 50  0000 C CNN
+F 1 "Conn_02x03_Odd_Even" H 5550 2326 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x03_Pitch2.54mm" H 5500 2100 50  0001 C CNN
+F 3 "~" H 5500 2100 50  0001 C CNN
+	1    5500 2100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4700 1900 6050 1900
+Wire Wire Line
+	6050 1900 6050 2100
+Wire Wire Line
+	6050 2100 5800 2100
+Text GLabel 4700 1700 2    60   Input ~ 0
+BTkey
+$Comp
+L Conn_01x07 J7
+U 1 1 5A0496ED
+P 7500 2500
+F 0 "J7" V 7466 2880 50  0000 L CNN
+F 1 "Bluetooth" V 7375 2880 50  0000 L CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x07_Pitch2.54mm_SMD_Pin1Left" H 7500 2500 50  0001 C CNN
+F 3 "~" H 7500 2500 50  0001 C CNN
+	1    7500 2500
+	0    1    -1   0   
+$EndComp
+Text GLabel 8900 2550 2    60   Input ~ 0
+BTkey
+$Comp
+L R R7
+U 1 1 5A04A4D2
+P 7300 2850
+F 0 "R7" H 7370 2896 50  0000 L CNN
+F 1 "4k7" H 7370 2805 50  0000 L CNN
+F 2 "Resistors_SMD:R_1206" V 7230 2850 50  0001 C CNN
+F 3 "" H 7300 2850 50  0001 C CNN
+	1    7300 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R8
+U 1 1 5A04A6EB
+P 7400 2850
+F 0 "R8" H 7470 2896 50  0000 L CNN
+F 1 "4k7" H 7470 2805 50  0000 L CNN
+F 2 "Resistors_SMD:R_1206" V 7330 2850 50  0001 C CNN
+F 3 "" H 7400 2850 50  0001 C CNN
+	1    7400 2850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7400 3200 7400 3000
+Wire Wire Line
+	7300 3000 7300 3200
+Wire Wire Line
+	7500 3050 7500 2700
+$Comp
+L R R11
+U 1 1 5A04BE79
+P 8400 2550
+F 0 "R11" V 8193 2550 50  0000 C CNN
+F 1 "4k7" V 8284 2550 50  0000 C CNN
+F 2 "Resistors_SMD:R_1206" V 8330 2550 50  0001 C CNN
+F 3 "" H 8400 2550 50  0001 C CNN
+	1    8400 2550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	8250 2550 8250 2750
+Wire Wire Line
+	8250 2700 7800 2700
+Connection ~ 8250 2700
+Wire Wire Line
+	8250 3100 8250 3050
+$Comp
+L GND #PWR04
+U 1 1 5A04C33C
+P 8250 3400
+F 0 "#PWR04" H 8250 3150 50  0001 C CNN
+F 1 "GND" H 8250 3250 50  0000 C CNN
+F 2 "" H 8250 3400 50  0001 C CNN
+F 3 "" H 8250 3400 50  0001 C CNN
+	1    8250 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R9
+U 1 1 5A04C569
+P 8250 2900
+F 0 "R9" H 8180 2854 50  0000 R CNN
+F 1 "4k7" H 8180 2945 50  0000 R CNN
+F 2 "Resistors_SMD:R_1206" V 8180 2900 50  0001 C CNN
+F 3 "" H 8250 2900 50  0001 C CNN
+	1    8250 2900
+	-1   0    0    1   
+$EndComp
+$Comp
+L R R10
+U 1 1 5A04C5F1
+P 8250 3250
+F 0 "R10" H 8180 3204 50  0000 R CNN
+F 1 "4k7" H 8180 3295 50  0000 R CNN
+F 2 "Resistors_SMD:R_1206" V 8180 3250 50  0001 C CNN
+F 3 "" H 8250 3250 50  0001 C CNN
+	1    8250 3250
+	-1   0    0    1   
+$EndComp
+$Comp
+L R RJ1
+U 1 1 5A04D77F
+P 8750 2550
+F 0 "RJ1" V 8543 2550 50  0000 C CNN
+F 1 "0" V 8634 2550 50  0000 C CNN
+F 2 "Resistors_SMD:R_1206" V 8680 2550 50  0001 C CNN
+F 3 "" H 8750 2550 50  0001 C CNN
+	1    8750 2550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	8550 2550 8600 2550
+Wire Wire Line
+	5050 5250 5050 3900
+Wire Wire Line
+	5050 3900 6900 3900
+Wire Wire Line
+	6900 3900 6900 2000
+Wire Wire Line
+	6900 2000 5800 2000
 $EndSCHEMATC

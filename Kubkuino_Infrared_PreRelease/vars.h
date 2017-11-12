@@ -1,3 +1,4 @@
+//Stare
 #define ctl 2 //Przycisk
 #define buzz 3 //Buzzer
 #define btpow 4 //Zasilanie BT
@@ -7,32 +8,41 @@
 #define rled A1
 #define gled A2
 #define bled A3
+//Nowe
+/*#define ctl 2 //Przycisk
+  #define buzz 3 //Buzzer
+  #define btpow 9 //Zasilanie BT
+  #define btx 7 //Bluetooth TX
+  #define brx 5 //Bluetooth RX
+  #define btconn 6 //BT connected
+  #define btkey 8 //BT Key
+  #define rled A1
+  #define gled A2
+  #define bled A3*/
+#if F_CPU != 16000000
+#undef F_CPU
+#define F_CPU 16000000
+#endif
+
+#if (SSD1306_LCDHEIGHT != 64)
+#error("Height incorrect, please fix Adafruit_SSD1306.h!");
+#endif
 
 /* Pomiary */
 int hot, cold;
-double pomiar = 0;
+double pomiar = 0, poppomiar = 0;
 
 /* Bluetooth */
 bool conn = false; //Polaczony?
 
 /* Alarm */
-volatile byte alarmState = 0b000;
+uint8_t alarmState = 0b000;
 bool glosny = false; //Czy ma piszczec?
 
 /* Zasilanie */
-volatile bool lcdon = true;
-volatile bool ledon = true;
-volatile bool dimlcd = false;
-
-
-String powermodes[] = { //Settings list
-  "  Bluetooth: ",
-  "        LED: ",
-  "      Alarm: ",
-  " Dim screen: ",
-  "        Back         \n",
-  "       Shutdown      "
-};
+bool lcdon = true;
+bool ledon = true;
+bool dimlcd = false;
 
 PROGMEM const uint8_t icon[] = { //Bluetooth
   0b00000011, 0b00000000,
